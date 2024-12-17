@@ -1,0 +1,12 @@
+<launch>
+  <!-- Launch TurtleBot in Gazebo -->
+  <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch">
+    <arg name="model" default="burger"/>
+  </include>
+
+  <!-- Run the LQR controller -->
+  <node pkg="lqr_control" type="lqr_controller.py" name="lqr_controller" output="screen"/>
+
+  <!-- Launch RViz for visualization -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turtlebot3_description)/rviz/model.rviz"/>
+</launch>

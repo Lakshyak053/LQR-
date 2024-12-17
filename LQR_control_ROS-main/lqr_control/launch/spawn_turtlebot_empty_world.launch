@@ -1,0 +1,25 @@
+<launch>
+  <!-- Set TurtleBot model (burger, waffle, waffle_pi) -->
+  <arg name="model" default="burger"/>
+
+  <!-- Export the TurtleBot model to the environment -->
+  <env name="TURTLEBOT3_MODEL" value="$(arg model)"/>
+
+  <!-- Load the URDF file for the TurtleBot into the parameter server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro'"/>
+
+  <!-- Launch empty Gazebo world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+  </include>
+
+  <!-- Spawn the TurtleBot model in Gazebo -->
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" output="screen"
+        args="-urdf -model turtlebot3 -param robot_description -x 0 -y 0 -z 0.1"/>
+
+  <!-- Run RViz for visualization -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find turtlebot3_description)/rviz/model.rviz"/>
+</launch>
